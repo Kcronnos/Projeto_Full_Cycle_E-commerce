@@ -1,0 +1,8 @@
+export defulft function Template({children}){
+    return(
+        <h1>Template<h1>
+        <p>aqui é o Template</p>
+
+        {children}
+    );
+}
