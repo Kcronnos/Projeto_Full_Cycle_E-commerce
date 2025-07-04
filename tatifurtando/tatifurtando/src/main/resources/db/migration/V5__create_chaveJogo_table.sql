@@ -3,5 +3,7 @@ CREATE TABLE chaves(
 	chave VARCHAR(255) NOT NULL,
 	chavestatus  VARCHAR(14) NOT NULL,
 	jogo_id BIGINT,
-	FOREIGN KEY (jogo_id) REFERENCES jogos(id)
+	item_pedido_id BIGINT,
+	FOREIGN KEY (jogo_id) REFERENCES jogos(id),
+	FOREIGN KEY (item_pedido_id) REFERENCES items_pedidos(id)
 );

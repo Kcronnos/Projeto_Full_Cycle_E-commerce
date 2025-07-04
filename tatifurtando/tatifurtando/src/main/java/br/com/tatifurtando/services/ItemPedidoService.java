@@ -40,4 +40,12 @@ public class ItemPedidoService {
 		
 		itemPedidoRepository.delete(itemPedido);
 	}
+	
+	public List<ItemPedidoResponseDTO> listarPorPedido(long pedidoId) {
+	    List<ItemPedido> itens = itemPedidoRepository.findByPedidoId(pedidoId);
+	    return itens.stream()
+	        .map(ItemPedidoMapper::toDTO)
+	        .toList();
+	}
+
 }

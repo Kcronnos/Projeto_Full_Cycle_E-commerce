@@ -27,13 +27,25 @@ public class ChaveJogo {
 	@JoinColumn(name = "jogo_id")
 	private Jogo jogo;
 	
+	@ManyToOne
+    @JoinColumn(name = "item_pedido_id") 
+    private ItemPedido itemPedido;
+	
 	public ChaveJogo() {}
 	
-	public ChaveJogo(long id, String chave, ChaveStatus chavestatus, Jogo jogo) {
+	public ChaveJogo(String chave, ChaveStatus chavestatus, Jogo jogo, ItemPedido itemPedido) {
+		this.chave = chave;
+		this.chavestatus = chavestatus;
+		this.jogo = jogo;
+		this.itemPedido = itemPedido;
+	}
+	
+	public ChaveJogo(long id, String chave, ChaveStatus chavestatus, Jogo jogo, ItemPedido itemPedido) {
 		this.id = id;
 		this.chave = chave;
 		this.chavestatus = chavestatus;
 		this.jogo = jogo;
+		this.itemPedido = itemPedido;
 	}
 
 	public long getId() {
@@ -66,6 +78,14 @@ public class ChaveJogo {
 
 	public void setJogo(Jogo jogo) {
 		this.jogo = jogo;
+	}
+	
+	public ItemPedido getItemPedido() {
+		return itemPedido;
+	}
+
+	public void setItemPedido(ItemPedido itemPedido) {
+		this.itemPedido = itemPedido;
 	}
 	
 }

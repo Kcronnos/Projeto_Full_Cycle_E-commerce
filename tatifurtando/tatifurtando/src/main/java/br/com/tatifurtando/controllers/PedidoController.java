@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.tatifurtando.dtos.PedidoCreateDTO;
 import br.com.tatifurtando.dtos.PedidoResponseDTO;
+import br.com.tatifurtando.entidades.Pedido;
+import br.com.tatifurtando.enuns.PedidoStatus;
+import br.com.tatifurtando.repositories.PedidoRepository;
 import br.com.tatifurtando.services.PedidoService;
 
 @RestController
@@ -23,6 +26,9 @@ public class PedidoController {
 
 	@Autowired
 	PedidoService pedidoService;
+	
+	@Autowired
+	PedidoRepository pedidoRepository;
 	
 	@PostMapping("/register")
 	public ResponseEntity<PedidoResponseDTO> store(@RequestBody PedidoCreateDTO pedidoCreateDTO) {
@@ -52,4 +58,46 @@ public class PedidoController {
 			return new ResponseEntity(e.getMessage(), HttpStatus.NOT_FOUND);
 		}
 	}
+	
+	@GetMapping("/user/{userId}/pendentes")
+	public ResponseEntity<List<PedidoResponseDTO>> listOuCriaPendentesPorUsuario(@PathVariable long userId) {
+	    List<PedidoResponseDTO> pedidosPendentes = pedidoService.getOrCreatePedidosPendentes(userId);
+	    return new ResponseEntity<>(pedidosPendentes, HttpStatus.OK);
+	}
+	
+	@PostMapping("/{userId}/finalizar")
+	public ResponseEntity<String> finalizarPedido(@PathVariable Long userId) {
+	    List<Pedido> pedidosPendentes = pedidoRepository.findByUserIdAndStatus(userId, PedidoStatus.PENDENTE);
+	    
+	    if (pedidosPendentes.isEmpty()) {
+	        return ResponseEntity.badRequest().body("Nenhum pedido pendente encontrado");
+	    }
+
+	    Pedido pedido = pedidosPendentes.get(0);
+
+	    if (pedido.getStatus() != PedidoStatus.PENDENTE) {
+	        return ResponseEntity.badRequest().body("Pedido já finalizado");
+	    }
+
+	    pedidoService.finalizarPedido(pedido);
+
+	    return ResponseEntity.ok("Pedido finalizado com sucesso");
+	}
+
+	
+	@GetMapping("/user/{userId}/pagos")
+	public ResponseEntity<List<PedidoResponseDTO>> listarPedidosPagos(@PathVariable long userId) {
+	    List<Pedido> pedidosPagos = pedidoService.listPedidosStatusPago(userId, PedidoStatus.PAGO);
+
+	    List<PedidoResponseDTO> resposta = pedidosPagos.stream().map(p -> new PedidoResponseDTO(
+	        p.getId(),
+	        p.getStatus(),
+	        p.getTotal(),
+	        p.getDataCridado(),
+	        p.getUser()
+	    )).toList();
+
+	    return ResponseEntity.ok(resposta);
+	}
+
 }

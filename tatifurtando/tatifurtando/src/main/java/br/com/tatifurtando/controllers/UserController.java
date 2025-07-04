@@ -11,9 +11,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.tatifurtando.dtos.UserCreateDTO;
+import br.com.tatifurtando.dtos.UserLoginDTO;
+import br.com.tatifurtando.dtos.UserLoginResponseDTO;
 import br.com.tatifurtando.dtos.UserResponseDTO;
 import br.com.tatifurtando.services.UserService;
 
@@ -42,6 +45,16 @@ public class UserController {
 			return new ResponseEntity(e.getMessage(), HttpStatus.NOT_FOUND);
 		}
 	}
+	
+	@PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody UserLoginDTO userloginDTO) {
+        try {
+            UserLoginResponseDTO response = userService.login(userloginDTO);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+        }
+    }
 
 	@DeleteMapping("/delete/{id_user}")
 	public ResponseEntity<String> destroy(@PathVariable long id_user) {
@@ -52,4 +65,11 @@ public class UserController {
 			return new ResponseEntity(e.getMessage(), HttpStatus.NOT_FOUND);
 		}
 	}
+	
+	@GetMapping("/users/check-email")
+	public ResponseEntity<Boolean> checkEmailExists(@RequestParam String email) {
+		boolean exists = userService.emailExists(email);
+	    return ResponseEntity.ok(exists);
+	}
+
 }

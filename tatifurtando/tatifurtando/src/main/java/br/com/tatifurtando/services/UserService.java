@@ -4,9 +4,12 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import br.com.tatifurtando.dtos.UserCreateDTO;
+import br.com.tatifurtando.dtos.UserLoginDTO;
+import br.com.tatifurtando.dtos.UserLoginResponseDTO;
 import br.com.tatifurtando.dtos.UserResponseDTO;
 import br.com.tatifurtando.entidades.User;
 import br.com.tatifurtando.mappers.UserMapper;
@@ -17,6 +20,9 @@ public class UserService {
 
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+    private PasswordEncoder passwordEncoder;
 		
 	public UserResponseDTO store(UserCreateDTO userCreateDTO) {
 		
@@ -65,4 +71,18 @@ public class UserService {
 		userRepository.delete(user);
 		
 	}
+	
+	public UserLoginResponseDTO login(UserLoginDTO userloginDTO) throws Exception {
+        User user = userRepository.findByEmail(userloginDTO.email());
+
+        if (user == null || !passwordEncoder.matches(userloginDTO.senha(), user.getSenha())) {
+            throw new Exception("Email ou senha inválidos");
+        }
+
+        return  new UserLoginResponseDTO(user.getId(), user.getNome(), user.getEmail());
+    }
+	
+	public boolean emailExists(String email) {
+        return userRepository.existsByEmail(email);
+    }
 }

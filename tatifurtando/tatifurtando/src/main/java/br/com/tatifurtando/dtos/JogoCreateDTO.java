@@ -9,5 +9,5 @@ public record JogoCreateDTO(
 		String descricao,
 		BigDecimal preco,
 		String desenvolvedora,
-		String imagemUrl
+		String imagemurl
 		) {}

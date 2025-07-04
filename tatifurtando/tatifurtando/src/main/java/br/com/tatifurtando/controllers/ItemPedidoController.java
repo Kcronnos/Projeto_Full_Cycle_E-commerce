@@ -13,9 +13,19 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mercadopago.MercadoPagoConfig;
+import com.mercadopago.client.payment.PaymentClient;
+import com.mercadopago.client.payment.PaymentCreateRequest;
+import com.mercadopago.client.payment.PaymentPayerRequest;
+import com.mercadopago.exceptions.MPApiException;
+import com.mercadopago.exceptions.MPException;
+import com.mercadopago.resources.payment.Payment;
+
 import br.com.tatifurtando.dtos.ItemPedidoCreateDTO;
 import br.com.tatifurtando.dtos.ItemPedidoResponseDTO;
+import br.com.tatifurtando.dtos.PaymentRequestDTO;
 import br.com.tatifurtando.services.ItemPedidoService;
+
 
 @RestController
 @RequestMapping("/tatifurtando/Itenspedidos")
@@ -51,5 +61,41 @@ public class ItemPedidoController {
 		} catch (Exception e) {
 			return new ResponseEntity(e.getMessage(), HttpStatus.NOT_FOUND);
 		}
+	}
+	
+	@GetMapping("/byPedido/{id_pedido}")
+	public ResponseEntity<List<ItemPedidoResponseDTO>> listarItensPorPedido(@PathVariable long id_pedido) {
+	    List<ItemPedidoResponseDTO> itens = itemPedidoService.listarPorPedido(id_pedido);
+	    return new ResponseEntity<>(itens, HttpStatus.OK);
+	}
+	
+	@PostMapping("/process_payment")
+	public ResponseEntity<?> criarPagamento(@RequestBody PaymentRequestDTO paymentRequest) {
+	    try {
+	        MercadoPagoConfig.setAccessToken("TEST-656783375639768-070316-9a319eced36caccd18af7615a773ff8a-556937756");
+
+	        PaymentClient paymentClient = new PaymentClient();
+
+	        PaymentCreateRequest request = PaymentCreateRequest.builder()
+	            .transactionAmount(paymentRequest.amount())
+	            .token(paymentRequest.token())
+	            .description("Compra de jogos")
+	            .installments(1)
+	            .paymentMethodId(paymentRequest.paymentMethodId())
+	            .payer(PaymentPayerRequest.builder()
+	                .email(paymentRequest.payerEmail())
+	                .build())
+	            .build();
+
+	        Payment payment = paymentClient.create(request);
+	        return ResponseEntity.ok(payment);
+
+	    } catch (MPApiException | MPException e) {
+	        System.err.println("Erro da API do Mercado Pago:");
+	        System.err.println("Status: " + ((MPApiException) e).getApiResponse().getStatusCode());
+	        System.err.println("Content: " + ((MPApiException) e).getApiResponse().getContent());
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+	            .body("Erro ao processar pagamento: " + e.getMessage());
+	    }
 	}
 }

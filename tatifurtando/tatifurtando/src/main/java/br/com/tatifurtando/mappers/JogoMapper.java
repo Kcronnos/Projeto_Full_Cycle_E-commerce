@@ -13,7 +13,7 @@ public static Jogo toEntity(JogoCreateDTO jogoCreateDTO) {
 		jogo.setDescricao(jogoCreateDTO.descricao());
 		jogo.setPreco(jogoCreateDTO.preco());
 		jogo.setDesenvolvedora(jogo.getDesenvolvedora());
-		jogo.setImagemUrl(jogoCreateDTO.imagemUrl());
+		jogo.setImagemUrl(jogoCreateDTO.imagemurl());
 		
 		return jogo;
 	}

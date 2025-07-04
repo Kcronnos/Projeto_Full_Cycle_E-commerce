@@ -10,5 +10,5 @@ public record JogoResponseDTO(
 		String descricao,
 		BigDecimal preco,
 		String desenvolvedora,
-		String imagemUrl
+		String imagemurl
 		) {}

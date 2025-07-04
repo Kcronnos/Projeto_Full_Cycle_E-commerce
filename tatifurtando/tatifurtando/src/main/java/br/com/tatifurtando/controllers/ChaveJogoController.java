@@ -23,24 +23,15 @@ public class ChaveJogoController {
 
 	@Autowired
 	ChaveJogoService chaveJogoService;
-	
-	@PostMapping("/register")
-	public ResponseEntity<ChaveJogoResponseDTO> store(@RequestBody ChaveJogoCreateDTO chaveJogoCreateDTO) {
-		return new ResponseEntity<>(chaveJogoService.store(chaveJogoCreateDTO), HttpStatus.CREATED);
-	}
 
-	@GetMapping("/showAll")
-	public ResponseEntity<List<ChaveJogoResponseDTO>> list() {
-		return new ResponseEntity<>(chaveJogoService.list(), HttpStatus.OK);
-	}
-
-	@GetMapping("/show/{id_chavejogo}")
-	public ResponseEntity<ChaveJogoResponseDTO> show(@PathVariable long id_chavejogo) {
-		try {
-			return new ResponseEntity<>(chaveJogoService.show(id_chavejogo), HttpStatus.OK);
-		} catch (Exception e) {
-			return new ResponseEntity(e.getMessage(), HttpStatus.NOT_FOUND);
-		}
+	@GetMapping("/porItemPedido/{id_item_pedido}")
+	public ResponseEntity<List<ChaveJogoResponseDTO>> listarChavesPorItemPedido(@PathVariable long id_item_pedido) {
+	    try {
+	        List<ChaveJogoResponseDTO> chaves = chaveJogoService.listarPorItemPedido(id_item_pedido);
+	        return new ResponseEntity<>(chaves, HttpStatus.OK);
+	    } catch (Exception e) {
+	        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+	    }
 	}
 
 	@DeleteMapping("/delete/{id_chavejogo}")
