@@ -10,7 +10,7 @@ export default function CardJogo({ jogo }) {
   const [modalComprarAberto, setModalComprarAberto] = useState(false);
   const [quantidade, setQuantidade] = useState(1);
 
-  // Bloquear rolagem da página de fundo enquanto algum modal estiver aberto
+  
   useEffect(() => {
     if (modalVerMaisAberto || modalComprarAberto) {
       document.body.style.overflow = "hidden";
@@ -31,7 +31,7 @@ export default function CardJogo({ jogo }) {
     setQuantidade(1);
   }
 
-  // Função ajustada para aceitar input vazio e permitir edição
+  
   function mudarQuantidade(e) {
     const val = e.target.value;
     if (val === "") {
@@ -42,7 +42,7 @@ export default function CardJogo({ jogo }) {
     if (!isNaN(num) && num >= 1) {
       setQuantidade(num);
     }
-    // Se quiser, pode ignorar valores inválidos sem alterar o estado
+    
   }
 
   async function pegarPedidoPendente(userId) {
@@ -51,7 +51,7 @@ export default function CardJogo({ jogo }) {
       throw new Error("Erro ao buscar pedidos pendentes");
     }
     const pedidos = await response.json();
-    // supondo que retorne array, pegue o primeiro pedido pendente
+    
     return pedidos.length > 0 ? pedidos[0] : null;
   }
 
@@ -79,7 +79,7 @@ export default function CardJogo({ jogo }) {
 
   async function adicionarAoCarrinho() {
     try {
-      // 1. pegar pedido pendente
+      
       const pedidoPendente = await pegarPedidoPendente(user.id);
 
       if (!pedidoPendente) {
@@ -87,7 +87,6 @@ export default function CardJogo({ jogo }) {
         return;
       }
 
-      // 2. adicionar o item ao pedido
       await adicionarItemPedido(pedidoPendente, jogo, quantidade === "" ? 1 : quantidade);
 
       alert(`Adicionado ${quantidade}x ${jogo.nome} ao carrinho!`);
@@ -165,7 +164,7 @@ export default function CardJogo({ jogo }) {
               <button
                 onClick={() => {
                   if (!user) {
-                    // redireciona manualmente para /login-required
+                    
                     navigate("/login-required");
                   } else {
                     abrirComprar();

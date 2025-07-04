@@ -21,10 +21,10 @@ export default function InicioBanner () {
               <span
                 className="absolute inset-0 bg-black bg-opacity-50 rounded-md -z-10"
                 style={{ 
-                  top: '-0.25em',    // aumenta um pouco acima do texto
-                  bottom: '-0.25em', // aumenta um pouco abaixo do texto
-                  left: '-0.5em',    // aumenta um pouco a esquerda
-                  right: '-0.5em'    // aumenta um pouco a direita
+                  top: '-0.25em',    
+                  bottom: '-0.25em', 
+                  left: '-0.5em',    
+                  right: '-0.5em'    
                 }}
               ></span>
             preço justo / confiável / sem burocracia

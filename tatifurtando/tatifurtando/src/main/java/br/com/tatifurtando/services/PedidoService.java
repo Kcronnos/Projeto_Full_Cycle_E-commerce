@@ -118,7 +118,7 @@ public class PedidoService {
 	    } catch (Exception e) {
 	        System.err.println("Erro ao finalizar pedido: " + e.getMessage());
 	        e.printStackTrace();
-	        throw e; // propaga para o controller retornar 500 com log
+	        throw e;
 	    }
 	}
 

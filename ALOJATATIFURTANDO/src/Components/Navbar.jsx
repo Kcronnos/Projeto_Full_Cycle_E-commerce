@@ -12,14 +12,14 @@ export default function Navbar() {
 
   useEffect(() => {
     if (showLogoutModal) {
-      // Bloqueia o scroll do body
+      
       document.body.style.overflow = 'hidden';
     } else {
-      // Restaura o scroll
+      
       document.body.style.overflow = 'auto';
     }
 
-    // Limpeza para caso o componente desmonte com modal aberto
+    
     return () => {
       document.body.style.overflow = 'auto';
     };

@@ -68,7 +68,7 @@ public class JogoService {
 
 	            for (RawgJogoDTO jogoApi : response.getBody().results()) {
 	                try {
-	                    // Chamada para detalhes do jogo
+	                	
 	                    String detalheUrl = "https://api.rawg.io/api/games/" + jogoApi.id() + "?key=" + API_KEY;
 	                    ResponseEntity<RawgDetalheDTO> detalheResponse = restTemplate.getForEntity(detalheUrl, RawgDetalheDTO.class);
 
@@ -85,7 +85,6 @@ public class JogoService {
 	                                : "Desenvolvedora Desconhecida"
 	                        );
 
-	                        // Preço aleatório entre 60.00 e 250.00
 	                        BigDecimal preco = BigDecimal.valueOf(60 + (190 * random.nextDouble()));
 	                        jogo.setPreco(preco.setScale(2, RoundingMode.HALF_UP));
 

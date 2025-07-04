@@ -14,7 +14,6 @@ export default function CadastroUsuario() {
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  // Valida os campos do formulário
   function validar() {
     const newErrors = {};
     if (!formData.nome.trim()) newErrors.nome = "Nome é obrigatório";
@@ -32,7 +31,7 @@ export default function CadastroUsuario() {
     setLoading(true);
 
     try {
-      // Verifica se email já existe
+      
       const checkResponse = await fetch(`/tatifurtando/users/check-email?email=${encodeURIComponent(formData.email)}`);
       const emailExists = await checkResponse.json();
 
@@ -42,7 +41,7 @@ export default function CadastroUsuario() {
         return;
       }
 
-      // Se email não existe, faz o cadastro
+      
       const response = await fetch("/tatifurtando/users/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
